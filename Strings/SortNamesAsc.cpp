@@ -20,9 +20,9 @@ int main()
     {
         for (j = i+1; j < n; j++)
         {
-            if (strcmp(str[i],str[j])>0)
+            if (strcmp(str[i],str[j])>0)             //compare 2 strings 
             {
-                strcpy(s,str[i]);
+                strcpy(s,str[i]);                   //copying source string to destination string
                 strcpy(str[i],str[j]);
                 strcpy(str[j],s);
             }
