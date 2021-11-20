@@ -1,225 +1,203 @@
-#include<iostream>
-#include<conio.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include <iostream>
 using namespace std;
-class Node
-{
-public:
-    int info;
-    Node* next;
+
+// Create a node
+struct Node {
+  int data;
+  struct Node* next;
 };
-class List:public Node
-{
- 
-    Node *first,*last;
-public:
-    List()
-    {
-        first=NULL;
-        last=NULL;
-    }
-    void create();
-    void insert();
-    void delet();
-    void display();
-    void search();
-};
-void List::create()
-{
-    Node *temp;
-    temp=new Node;
-    int n;
-    cout<<"\nEnter an Element:";
-    cin>>n;
-    temp->info=n;
-    temp->next=NULL;
-    if(first==NULL)
-    {
-        first=temp;
-        last=first;
-    }
- 
-    else
-     {
-        last->next=temp;
-        last=temp;
-    }
-}
-void List::insert()
-{
-    Node *prev,*cur;
-    prev=NULL;
-    cur=first;
-    int count=1,pos,ch,n;
-    Node *temp=new Node;
-    cout<<"\nEnter an Element:";
-    cin>>n;
-    temp->info=n;
-    temp->next=NULL;
-    cout<<"\nINSERT AS\n1:FIRSTNODE\n2:LASTNODE\n3:IN BETWEEN FIRST&LAST NODES";
-    cout<<"\nEnter Your Choice:";
-    cin>>ch;
-    switch(ch)
-    {
-    case 1:
-        temp->next=first;
-        first=temp;
-        break;
-    case 2:
-        last->next=temp;
-        last=temp;
-        break;
-    case 3:
-        cout<<"\nEnter the Position to Insert:";
-        cin>>pos;
-        while(count!=pos)
-        {
-            prev=cur;
-            cur=cur->next;
-            count++;
-        }
-         }
-        if(count==pos)
-        {
-            prev->next=temp;
-            temp->next=cur;
-        }
-        else
-            cout<<"\nNot Able to Insert";
-        break;
- 
-    }
+
+void insertAtBeginning(struct Node** head_ref, int new_data) {
+  // Allocate memory to a node
+  struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+
+  // insert the data
+  new_node->data = new_data;
+  new_node->next = (*head_ref);
+
+  // Move head to new node
+  (*head_ref) = new_node;
 }
 
-void List::delet()
-{
-    Node *prev=NULL,*cur=first;
-    int count=1,pos,ch;
-    cout<<"\nDELETE\n1:FIRSTNODE\n2:LASTNODE\n3:IN BETWEEN FIRST&LAST NODES";
-    cout<<"\nEnter Your Choice:";
-    cin>>ch;
-    switch(ch)
-    {
-    case 1:
-        if(first!=NULL)
-        {
-            cout<<"\nDeleted Element is "<<first->info;
-            first=first->next;
-        }
-        else
-            cout<<"\nNot Able to Delete";
-        break;
-    case 2:
-        while(cur!=last)
-        {
-            prev=cur;
-            cur=cur->next;
-        }
-        if(cur==last)
-        {
-            cout<<"\nDeleted Element is: "<<cur->info;
-            prev->next=NULL;
-            last=prev;
-        }
-        else
-            cout<<"\nNot Able to Delete";
-        break;
-    case 3:
-        cout<<"\nEnter the Position of Deletion:";
-        cin>>pos;
-        while(count!=pos)
-        {
-            prev=cur;
-            cur=cur->next;
-            count++;
-        }
-        if(count==pos)
-        {
-            cout<<"\nDeleted Element is: "<<cur->info;
-            prev->next=cur->next;
-        }
-        else
-            cout<<"\nNot Able to Delete";
-        break;
-    }
-}
-void List::display()
-{
-    Node *temp=first;
-    if(temp==NULL)
-    {
-        cout<<"\nList is Empty";
-    }
-    while(temp!=NULL)
-    {
-        cout<<temp->info;
-        cout<<"-->";
-        temp=temp->next;
-    }
-    cout<<"NULL";
-}
-void List::search()
-{
-    int value,pos=0;
-    bool flag=false;
-    if(first==NULL)
-    {
-        cout<<"List is Empty";
-        return;
-    }
-    cout<<"Enter the Value to be Searched:";
-    cin>>value;
-    Node *temp;
-    temp=first;
-    while(temp!=NULL)
-    {
-        pos++;
-        if(temp->info==value)
-        {
-            flag=true;
-            cout<<"Element"<<value<<"is Found at "<<pos<<" Position";
-            return;
-        }
-        temp=temp->next;
-    }
-    if(!flag)
-    {
-        cout<<"Element "<<value<<" not Found in the List";
-    }
+// Insert a node after a node
+void insertAfter(struct Node* prev_node, int new_data) {
+  if (prev_node == NULL) {
+  cout << "The given previous node cannot be NULL";
+  return;
+  }
+
+  struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+  new_node->data = new_data;
+  new_node->next = prev_node->next;
+  prev_node->next = new_node;
 }
 
-int main()
+// Insert at the end
+void insertAtEnd(struct Node** head_ref, int new_data) {
+  struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+  struct Node* last = *head_ref;                                            //used in step 5
+
+  new_node->data = new_data;
+  new_node->next = NULL;
+
+  if (*head_ref == NULL) {             //if only one node is present in the list
+  *head_ref = new_node;
+  return;
+  }
+
+  while (last->next != NULL) last = last->next;
+
+  last->next = new_node;
+  return;
+}
+
+// Delete a node
+void deleteNode(struct Node** head_ref, int key) {
+  struct Node *temp = *head_ref, *prev;
+
+  if (temp != NULL && temp->data == key) {
+  *head_ref = temp->next;
+  free(temp);
+  return;
+  }
+  // Find the key to be deleted
+  while (temp != NULL && temp->data != key) {
+  prev = temp;
+  temp = temp->next;
+  }
+
+  // If the key is not present
+  if (temp == NULL) return;
+
+  // Remove the node
+  prev->next = temp->next;
+
+  free(temp);
+}
+
+// Search a node
+bool searchNode(struct Node** head_ref, int key) {
+  struct Node* current = *head_ref;
+
+  while (current != NULL) {
+  if (current->data == key) return true;
+  current = current->next;
+  }
+  return false;
+}
+
+// Sort the linked list
+void sortLinkedList(struct Node** head_ref) {
+  struct Node *current = *head_ref, *index = NULL;
+  int temp;
+
+  if (head_ref == NULL) {
+  return;
+  } else {
+  while (current != NULL) {
+    // index points to the node next to current
+    index = current->next;
+
+    while (index != NULL) {
+    if (current->data > index->data) {
+      temp = current->data;
+      current->data = index->data;
+      index->data = temp;
+    }
+    index = index->next;
+    }
+    current = current->next;
+  }
+  }
+}
+
+// Print the linked list
+void printList(struct Node* node) {
+  while (node != NULL) {
+  cout << node->data << " ";
+  node = node->next;
+  }
+}
+
+// Driver program
+int main() 
 {
-    List l;
-    int ch;
-    while(1)
+  struct Node* head = NULL;
+
+  int choice,flag=1,item,new_data,key;
+  while (flag==1)
+  {
+    cout<<"\n1.INSERT\n2.DELETE\n3.SEARCH\n4.DISPLAY\n5.SORT\n6.EXIT";
+    cout<<"\n Enter your choice : ";
+    cin>>choice;
+    switch (choice)
     {
-        cout<<"\n --- MENU ---";
-        cout<<"\n1:CREATE\n2:INSERT\n3:DELETE\n4:SEARCH\n5:DISPLAY\n6:EXIT\n";
-        cout<<"\nEnter Your Choice:";
-        cin>>ch;
-        switch(ch)
+    case 1:
+        int choice;
+        cout<<"\n1.Insert at Beginning\n2.Insert in Between\n3.Insert at End";
+        cout<<"\n Enter your choice : ";
+        cin>>choice;
+        switch (choice)
         {
-        case 1:
-            l.create();
+            case 1:
+            cout<<"\n Enter a node to insert: ";
+            cin>>new_data;
+            insertAtBeginning(&head, new_data);
             break;
+        
+            case 2:
+            cout<<"\n Enter a node to insert: ";
+            cin>>new_data;
+            insertAfter(head->next, new_data);
+            break;
+
+            case 3:
+            cout<<"\n Enter a node to insert: ";
+            cin>>new_data;
+            insertAtEnd(&head, new_data);
+            break;
+        }
+        break;
+
         case 2:
-            l.insert();
+            cout<<"\n Enter a node to delete: ";
+            cin>>key;
+            deleteNode(&head, key);
             break;
-        case 3:
-            l.delet();
-            break;
-        case 4:
-            l.search();
-            break;
-        case 5:
-            l.display();
-            break;
-        case 6:
-            return 0;
-        }
-    }
-    return 0;
-}
 
+        case 3:
+            cout<<"\n Enter a node to search: ";
+            cin>>item;
+            if (searchNode(&head, item)) {
+                cout << endl << item << " is found";
+            } 
+            else 
+            {
+            cout << endl << item << " is not found";
+            }
+            break;
+
+        case 4:
+            cout<<"\n Linked List is : ";
+            printList(head);
+            break;
+
+        case 5:
+            cout<<"\n Sorted List is : ";
+            sortLinkedList(&head);
+            printList(head);
+            break;
+
+        case 6:
+            flag=0;
+            break;
+  
+    default:
+      cout<<"\n Enter some choice!";
+      break;
+    }
+  }
+  return 0;
+}
 
