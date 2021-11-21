@@ -137,6 +137,33 @@ void deleteNodeAtGivenPos(struct Node** head_ref, int n)
     deleteNode(head_ref, current);
 }
 
+int search(Node** head_ref, int x)
+{
+ 
+    // Stores head Node
+    Node* temp = *head_ref;
+ 
+    // Stores position of the integer
+    int pos = 0;
+ 
+    // Traverse the doubly linked list
+    while (temp->data != x
+           && temp->next != NULL) {
+ 
+        // Update pos
+        pos++;
+ 
+        // Update temp
+        temp = temp->next;
+    }
+     // If the integer not present in the doubly linked list
+    if (temp->data != x)
+        return -1;
+ 
+    // If the integer present in the doubly linked list
+    return (pos + 1);
+}
+
 // print the doubly linked list
 void displayList(struct Node* node) {
   struct Node* last;
@@ -155,10 +182,10 @@ void displayList(struct Node* node) {
 int main() {
   // initialize an empty node
   struct Node* head = NULL;
-  int choice,flag=1,item,data,n;
+  int choice,flag=1,item,data,n,X;
   while (flag==1)
   {
-    cout<<"\n1.INSERT\n2.DELETE\n3.DISPLAY\n4.EXIT";
+    cout<<"\n1.INSERT\n2.DELETE\n3.SEARCH\n4.DISPLAY\n5.EXIT";
     cout<<"\n Enter your choice : ";
     cin>>choice;
     switch (choice)
@@ -197,11 +224,23 @@ int main() {
             break;
 
         case 3:
+            cout<<"\n Enter node to search: ";
+            cin>>X;
+            if (search(&head, X)) {
+                cout << endl << X << " is found";
+            } 
+            else 
+            {
+            cout << endl << X << " is not found";
+            }
+            break;
+
+        case 4:
             cout<<"\n Linked List is : ";
             displayList(head);
             break;
 
-        case 4:
+        case 5:
             flag=0;
             break;
   
