@@ -164,6 +164,27 @@ int search(Node** head_ref, int x)
     return (pos + 1);
 }
 
+void reverse(Node **head_ref)
+{
+    Node *temp = NULL;
+    Node *current = *head_ref;
+     
+    /* swap next and prev for all nodes of
+    doubly linked list */
+    while (current != NULL)
+    {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;            
+        current = current->prev;
+    }
+     
+    /* Before changing the head, check for the cases like empty
+        list and list with only one node */
+    if(temp != NULL )
+        *head_ref = temp->prev;
+}
+
 // print the doubly linked list
 void displayList(struct Node* node) {
   struct Node* last;
@@ -185,7 +206,7 @@ int main() {
   int choice,flag=1,item,data,n,X;
   while (flag==1)
   {
-    cout<<"\n1.INSERT\n2.DELETE\n3.SEARCH\n4.DISPLAY\n5.EXIT";
+    cout<<"\n1.INSERT\n2.DELETE\n3.SEARCH\n4.DISPLAY\n5.REVERSE\n6.EXIT";
     cout<<"\n Enter your choice : ";
     cin>>choice;
     switch (choice)
@@ -239,8 +260,14 @@ int main() {
             cout<<"\n Linked List is : ";
             displayList(head);
             break;
-
+            
         case 5:
+            cout<<"\n Reverse Linked List is : ";
+            reverse(&head);
+            displayList(head);
+            break;
+
+        case 6:
             flag=0;
             break;
   
