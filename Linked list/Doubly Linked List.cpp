@@ -114,6 +114,29 @@ void deleteNode(struct Node** head, struct Node* del_node) {
   free(del_node);
 }
 
+void deleteNodeAtGivenPos(struct Node** head_ref, int n)
+{
+    /* if list in NULL or invalid position is given */
+    if (*head_ref == NULL || n <= 0)
+        return;
+ 
+    struct Node* current = *head_ref;
+    int i;
+ 
+    /* traverse up to the node at position 'n' from
+       the beginning */
+    for (int i = 1; current != NULL && i < n; i++)
+        current = current->next;
+ 
+    /* if 'n' is greater than the number of nodes
+       in the doubly linked list */
+    if (current == NULL)
+        return;
+ 
+    /* delete the node pointed to by 'current' */
+    deleteNode(head_ref, current);
+}
+
 // print the doubly linked list
 void displayList(struct Node* node) {
   struct Node* last;
@@ -127,30 +150,12 @@ void displayList(struct Node* node) {
     cout << "NULL\n";
 }
 
+
+
 int main() {
   // initialize an empty node
   struct Node* head = NULL;
-
-  /*insertEnd(&head, 5);
-  insertFront(&head, 1);
-  insertFront(&head, 6);
-  insertEnd(&head, 9);
-
-  // insert 11 after head
-  insertAfter(head, 11);
-
-  // insert 15 after the seond node
-  insertAfter(head->next, 15);
-
-  displayList(head);
-
-  // delete the last node
-  deleteNode(&head, head->next->next->next->next->next);
-
-  displayList(head);
-  */
-
-   int choice,flag=1,item,data,del_node;
+  int choice,flag=1,item,data,n;
   while (flag==1)
   {
     cout<<"\n1.INSERT\n2.DELETE\n3.DISPLAY\n4.EXIT";
@@ -186,11 +191,10 @@ int main() {
         break;
 
         case 2:
-            cout<<"\n Enter a node to delete: ";
-            cin>>del_node;
-            deleteNode(&head, head->next->next->next->next->next);
+            cout<<"\n Enter position of node to delete: ";
+            cin>>n;
+            deleteNodeAtGivenPos(&head, n);
             break;
-
 
         case 3:
             cout<<"\n Linked List is : ";
