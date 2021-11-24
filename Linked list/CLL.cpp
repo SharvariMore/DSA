@@ -159,76 +159,128 @@ void traverse(struct Node* last) {
   } while (p != last->next);
 }
 
-int count(struct node *head)
+int count(struct Node *last)
 {
-    int total = 0;
-    struct node *current = head;
+   int total = 0;
+   struct Node *current = last;
 
     // Iterate till end of list
     do 
     {
         current = current->next;
         total++;
-    } while (current != head);
+    } while (current != last);
 
     // Return total nodes in list
     return total;
-}
+} 
 
-int search(struct node *head, int key)
+int search(struct Node *last, int key)
 {
 	int index = 0;
-    struct node *current = head;
+  struct Node *current = last;
 
     // Iterate till end of list
     do 
     {
 		// Nothing to look into
 		if (current == NULL)
-			return;
+			return -1;
 		
 		if (current->data == key)
 			return index;
 
         current = current->next;
 		index++;
-    } while (current != head);
+    } while (current != last);
 
     // Element not found in list
     return -1;
 }
 
+
 int main() {
   struct Node* last = NULL;
+  int choice,flag=1,item,data,key,n,index;
+  while (flag==1)
+  {
+    cout<<"\n1.CREATE\n2.INSERT\n3.DELETE\n4.SEARCH\n5.DISPLAY\n6.COUNT\n7.EXIT";
+    cout<<"\n Enter your choice : ";
+    cin>>choice;
+    switch (choice)
+    {
 
-  last = addToEmpty(last, 6);
-  last = addEnd(last, 8);
-  last = addFront(last, 2);
+    case 1:
+        cout<<"\n Enter a node to add at end: ";
+            cin>>data;
+            last=addToEmpty(last, data);
+            break;
 
-  last = addAfter(last, 10, 2);
+    case 2:
+        int choice;
+        cout<<"\n1.Insert at Beginning\n2.Insert in Between\n3.Insert at End";
+        cout<<"\n Enter your choice : ";
+        cin>>choice;
+        switch (choice)
+        {
+            case 1:
+            cout<<"\n Enter a node to insert: ";
+            cin>>data;
+            last=addFront(last, data);
+            break;
+        
+            case 2:
+            cout<<"\n Enter a node to insert & after which node in List: ";
+            cin>>data>>item;
+            last=addAfter(last, data,item);
+            break;
 
-  traverse(last);
+            case 3:
+            cout<<"\n Enter a node to insert: ";
+            cin>>data;
+            last=addEnd(last, data);
+            break;
+        }
+        break;
 
-  deleteNode(&last, 8);
-  cout << endl;
+        case 3:
+            cout<<"\n Enter a node to delete: ";
+            cin>>key;
+            deleteNode(&last, key);
+            break;
 
-  traverse(last);
+        case 4:
+            cout<<"\n Enter a node to search: ";
+            cin>>n;
+            index = search(last, n);
+            if(index == -1)
+             {
+                cout << endl << n << " is not found";
+            } 
+            else 
+            {
+            cout << endl << n << " is found at "<<index<<" position ";
+            }
+            break;
+
+        case 5:
+            cout<<"\n Linked List is : ";
+            traverse(last);
+            break;
+
+        case 6:
+            cout<<"Total Nodes in the List are :"<<count(last)<<"\n";
+            break;
+
+        case 7:
+            flag=0;
+            break;
   
-  printf("Total nodes = %d\n", count(head));
-
-  printf("Enter element to search: ");
-				scanf("%d", &n);
-				index = search(head, n);
-
-				if (index == -1)
-					printf("%d not found in list.\n", n);
-				else 
-                	printf("%d found at %d position.\n", n, (index + 1));
-                
-				getchar(); // Hold screen
-                getchar(); // Hold screen
-                break;
-
-
+    default:
+      cout<<"\n Enter some choice!";
+      break;
+    }
+  }
   return 0;
 }
+
